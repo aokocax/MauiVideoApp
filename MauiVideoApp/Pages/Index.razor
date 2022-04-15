@@ -1,0 +1,113 @@
+﻿@page "/"
+
+@inject IJSRuntime JS
+
+<div data="videos" class="page">
+    <div class="page-content">
+        <div id="pages_maincontent">
+      
+            <h2 class="page_title">VIDEO CONVERT</h2>
+             
+    @*        <a href="" id="add_video" class="btn btn--full" @onclick="OpenFolder" >OPEN</a>
+*@
+               
+                    <InputFile OnChange="@LoadFile" id="input_file" style="display:none" />
+                    <a href="" id="add_video" class="btn btn--full" onclick="javascript:$('#input_file').click();" >ADD A VIDEO</a>
+                     <video class="thevideo" id="myvideo" width="100%" style="display:none" >
+                        <source id="mysource" src=""/>
+                    </video> 
+          
+                @if ( videoSelected && string.IsNullOrEmpty(sourceGif))
+                {
+                   
+
+                
+                    <div class="range-slider">
+                        <input type="text" class="js-range-slider" value="" />
+                    </div>
+                    <div class="extra-controls">
+                        <input type="text" class="js-input-from" value="0" />
+                        <input type="text" class="js-input-to" value="0" />
+                        <input type="hidden" @bind="from" id="js-input-hidden-from" />
+                        <input type="hidden" @bind="to" id="js-input-hidden-to"  />
+                    </div>
+                    <div class="contactform">
+                        <div class="form_row">
+                            <label>Convert to:</label>
+			                <div class="selector_overlay">
+				                <select name="selectoptions" class="required" @bind="convertionFormat">
+					                <option value="" disabled selected>Video formats</option>
+					                <option value=".gif">GIF</option>
+					                <option value=".mov">MOV</option>
+					                <option value=".mp4">MP4</option>
+					                <option value=".avi">AVI</option>
+					                <option value=".ts">TS</option>
+				                </select>
+			                </div>
+                        </div>
+                    </div>
+                    @if (convertionFormat==".gif")
+                    {
+                        <div class="extra-controls2">
+                            <input type="text" class="fps" @bind="fps" placeholder="FPS 10, 20 etc" />
+                            <input type="text" class="scale" @bind="scale" placeholder="320,640 etc" />
+                        </div>
+                    }
+                     @if (convertionFormat==".mp4")
+                    {
+                        <div class="extra-controls2">
+                            <input type="text" class="fps" @bind="fps" placeholder="FPS 25, 30 etc" />
+                        
+                        </div>
+                    }
+                    
+               
+                    @if (!convertStarted)
+                    {
+                    <a href="" class="btn btn--full" @onclick="ConvertVideo">CONVERT</a>
+                    }
+                    else
+                    {
+                        <label for="convertion">Progress:</label>
+                        <progress id="convertion" value="0" max="100" style="width:100%;height:30px"> 0% </progress>
+                    
+                }
+            }
+            else
+            {
+                if (videoSelected)
+                {
+                    <label for="completed">Completed:</label>
+                    @if (convertionFormat==".gif")
+                    {
+                        <img src="@sourceGif" style="width:100%"/>
+                    }
+                  
+                    
+                    <br />
+                    <a href="" class="btn btn--full" @onclick="(()=>ShowFile(outputFile))" >SHOW FILE</a>
+                }
+       
+                    
+            }
+                
+                   
+              
+		
+        </div>
+    </div>
+</div>
+
+
+@code{
+    
+    private int from { get; set; } 
+    private int to { get; set; } 
+    private bool convertCompleted{ get;set; }
+    private bool videoSelected { get; set; } 
+    private bool convertStarted { get; set; } 
+    private string sourceGif { get; set; }
+    private string fps{ get; set; }
+    private string scale { get; set; }
+    private string convertionFormat{ get; set; }
+	}
